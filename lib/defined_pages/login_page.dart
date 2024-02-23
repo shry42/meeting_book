@@ -6,17 +6,13 @@ import 'package:room_booking_app/controllers/app_controllers/app_main_controller
 import 'package:room_booking_app/controllers/login_controller.dart';
 import 'package:room_booking_app/custom_painter/login_page_shape.dart';
 import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
-import 'package:room_booking_app/test_files/login_test_file.dart';
 import 'package:room_booking_app/utils/toast_service.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class LoginPage extends StatelessWidget {
   final loginController lc = Get.put(loginController());
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passController = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -242,7 +238,7 @@ class LoginPage extends StatelessWidget {
                                               transition:
                                                   Transition.rightToLeft);
                                         } else {
-                                          Get.offAll(const MyMeetingsScreen(
+                                          Get.offAll(MyMeetingsScreen(
                                               title: 'My Meetings'));
                                         }
                                       } else {

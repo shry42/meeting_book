@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MyMeetingsScreen extends StatelessWidget {
   const MyMeetingsScreen({super.key, required this.title});
@@ -47,6 +50,46 @@ class MyMeetingsScreen extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Spacer(),
+                    Shimmer(
+                      duration: const Duration(seconds: 2),
+                      // This is NOT the default value. Default value: Duration(seconds: 0)
+                      interval: const Duration(milliseconds: 20),
+                      // This is the default value
+                      color: Colors.white,
+                      // This is the default value
+                      colorOpacity: 1,
+                      // This is the default value
+                      enabled: true,
+                      // This is the default value
+                      direction: const ShimmerDirection.fromLTRB(),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(CreateMeetingsUser(title: 'Create Meetings'));
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              border: Border.all(),
+                              color: Colors.white70,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  'Create Meetings',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
