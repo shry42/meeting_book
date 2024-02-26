@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:room_booking_app/controllers/user_controllers/getall_rooms_controller.dart';
 import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MyMeetingsScreen extends StatelessWidget {
-  const MyMeetingsScreen({super.key, required this.title});
+  MyMeetingsScreen({super.key, required this.title});
 
   final String title;
+
+  final GetAllRoomsController allRoomCont = GetAllRoomsController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +70,8 @@ class MyMeetingsScreen extends StatelessWidget {
                       direction: const ShimmerDirection.fromLTRB(),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(CreateMeetingsUser(title: 'Create Meetings'));
+                          Get.to(const CreateMeetingsUser(
+                              title: 'Create Meetings'));
                         },
                         child: Container(
                           height: 30,

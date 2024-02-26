@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:room_booking_app/api_services/api_service.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
+import 'package:room_booking_app/models/user_model/get_all_user_model.dart';
+
+//we have two apis in this controller
 
 class CreateMeetingUserController extends GetxController {
   RxInt roomId = 0.obs;
@@ -22,25 +25,52 @@ class CreateMeetingUserController extends GetxController {
   RxString? seatingCapacity;
   RxString? roomDetails;
 
-  List<RoomsGetModel> roomDetailss = [];
+  List<RoomsGetModel> roomListObj = [];
+  List<GetAllUserDetailsModel> userListObj = [];
 
-  Future roomDetailsget() async {
+//For GET ROOMS
+  Future getRooms() async {
+    // throw Exception();
     http.Response response = await http.get(
-      Uri.parse("${ApiService.baseUrl}/api/rooms/getRooms"),
+      Uri.parse('${ApiService.baseUrl}/api/rooms/getRooms'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${AppController.accessToken}',
       },
     );
-
     if (response.statusCode == 200) {
-      Map<String, dynamic> result = jsonDecode(response.body);
+      Map<String, dynamic> result = json.decode(response.body);
       List<dynamic> data = result['data'];
-      roomDetailss = data.map((e) => RoomsGetModel.fromJson(e)).toList();
-      return roomDetailss;
+
+      roomListObj = data.map((e) => RoomsGetModel.fromJson(e)).toList();
+
+      return roomListObj;
     }
   }
 
+//FOR GET USERS
+
+  Future getUsers() async {
+    // throw Exception();
+    http.Response response = await http.get(
+      Uri.parse('${ApiService.baseUrl}/api/users/allUser'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${AppController.accessToken}',
+      },
+    );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> result = json.decode(response.body);
+      List<dynamic> data = result['data'];
+
+      userListObj =
+          data.map((e) => GetAllUserDetailsModel.fromJson(e)).toList();
+
+      return userListObj;
+    }
+  }
+
+// FOR CREATE USERS
   Future<void> createMeetingUser() async {
     http.Response response = await http.post(
       Uri.parse('${ApiService.baseUrl}/api/rooms/createBooking'),
@@ -49,13 +79,15 @@ class CreateMeetingUserController extends GetxController {
         'Authorization': 'Bearer ${AppController.accessToken}',
       },
       body: json.encode({
-        "roomId": roomId.value,
-        "date": date.value,
-        "startTime": startTime.value,
-        "endTime": endTime.value,
-        "meetingType": meetingType.value,
-        "purpose": purpose.value,
-        "participant": participants.value,
+        "roomId": 1,
+        "date": "2024-02-16",
+        "startTime": "13:00",
+        "endTime": "13:50",
+        "meetingType": "Internal",
+        // "meetingType": "External",
+        "purpose": "interview",
+        // "purpose": "meeting"
+        // "participant": "[1, 2, 3]" //these will be particpants id with selected value
       }),
     );
     if (response.statusCode == 200) {
