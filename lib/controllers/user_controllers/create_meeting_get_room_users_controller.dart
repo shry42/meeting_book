@@ -7,7 +7,7 @@ import 'package:room_booking_app/controllers/app_controllers/app_main_controller
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
 import 'package:room_booking_app/models/user_model/get_all_user_model.dart';
 
-//we have two apis in this controller
+//we have two apis for get and one for createmeet post in this controller
 
 class CreateMeetingUserController extends GetxController {
   RxInt roomId = 0.obs;
@@ -17,6 +17,12 @@ class CreateMeetingUserController extends GetxController {
   RxString meetingType = "".obs;
   RxString purpose = "".obs;
   RxList participants = <int>[].obs;
+
+  //
+  RxString selectedMeetingType = 'External'.obs;
+  var selectedRoomId = 0.obs;
+  RxString selectedRoom = ''.obs;
+  RxString selectedFloor = ''.obs;
 
   //For get all RoomsGetModels
   RxInt? id;

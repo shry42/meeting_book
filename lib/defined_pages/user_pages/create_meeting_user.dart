@@ -27,11 +27,11 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
   late TimeOfDay _endTime;
   String? _purpose;
   List<String>? _selectedParticipants; // New field for Select Participant
+  dynamic _selectedRoomId;
   final _formKey = GlobalKey<FormState>();
 
   final CreateMeetingUserController mc = Get.put(CreateMeetingUserController());
   // final GetAllRoomsController allRoomCont = GetAllRoomsController();
-
   // List<String> participantsList = [
   //   'Participant 1',
   //   'Participant 2',
@@ -197,6 +197,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               onChanged: (value) {
                                 setState(() {
                                   _selectedRoom = value;
+                                  // _selectedRoomId = mc.roomListObj.firstWhere(
+                                  //     (element) => element.id == value);
                                 });
                                 // Fetch and set room details based on the selected room
                                 setRoomDetails(value);
@@ -445,16 +447,33 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                 child: MultiSelectDialogField<String>(
                                   searchable: true,
                                   items: participantsList
-                                      .map((participant) =>
-                                          MultiSelectItem<String>(
-                                            participant.firstName,
-                                            participant.firstName,
-                                          ))
+                                      .map(
+                                        (participant) =>
+                                            MultiSelectItem<String>(
+                                          '${participant.firstName} ${participant.lastName}',
+                                          '${participant.firstName} ${participant.lastName}',
+                                        ),
+                                      )
                                       .toList(),
                                   initialValue: [],
                                   onConfirm: (values) {
                                     setState(() {
                                       _selectedParticipants = values;
+                                      // Assuming participantsList is a List<GetAllUserDetailsModel>
+                                      List<dynamic> selectedIds =
+                                          _selectedParticipants!
+                                              .map((selectedName) =>
+                                                  participantsList
+                                                      .firstWhere(
+                                                        (participant) =>
+                                                            '${participant.firstName} ${participant.lastName}' ==
+                                                            selectedName,
+                                                      )
+                                                      .id)
+                                              .toList();
+
+                                      // Now, selectedIds contains the ids of the selected participants
+                                      print(selectedIds);
                                     });
                                   },
                                   title: const Text('Select Participants'),

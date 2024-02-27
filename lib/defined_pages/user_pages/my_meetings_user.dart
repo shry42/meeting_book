@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
-import 'package:room_booking_app/controllers/user_controllers/getall_rooms_controller.dart';
 import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MyMeetingsScreen extends StatelessWidget {
-  MyMeetingsScreen({super.key, required this.title});
+  const MyMeetingsScreen({super.key, required this.title});
 
   final String title;
 
-  final GetAllRoomsController allRoomCont = GetAllRoomsController();
+  // final GetAllRoomsController allRoomCont = GetAllRoomsController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +37,7 @@ class MyMeetingsScreen extends StatelessWidget {
                 ],
               ),
               //--code to remove border
-              border: Border.fromBorderSide(BorderSide.none),
+              border: const Border.fromBorderSide(BorderSide.none),
               shadowStrength: 10,
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(16),
@@ -55,7 +54,7 @@ class MyMeetingsScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Shimmer(
                       duration: const Duration(seconds: 2),
                       // This is NOT the default value. Default value: Duration(seconds: 0)
@@ -120,7 +119,7 @@ class MyMeetingsScreen extends StatelessWidget {
                 },
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Color.fromARGB(255, 233, 239, 226),
+                  fillColor: const Color.fromARGB(255, 233, 239, 226),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
@@ -146,15 +145,6 @@ class MyMeetingsScreen extends StatelessWidget {
           ],
         ),
       ),
-      // body: Center(
-      //   child: Text(
-      //     title,
-      //     style: const TextStyle(
-      //       fontSize: 100,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
