@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:room_booking_app/api_services/api_service.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
+import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
 import 'package:room_booking_app/models/user_model/get_all_user_model.dart';
 
@@ -12,8 +13,8 @@ import 'package:room_booking_app/models/user_model/get_all_user_model.dart';
 class CreateMeetingUserController extends GetxController {
   RxInt roomId = 0.obs;
   RxString date = "".obs;
-  RxString startTime = "".obs;
-  RxString endTime = "".obs;
+  late TimeOfDay startTime;
+  late TimeOfDay endTime;
   RxString meetingType = "".obs;
   RxString purpose = "".obs;
   RxList participants = <int>[].obs;
@@ -23,6 +24,11 @@ class CreateMeetingUserController extends GetxController {
   var selectedRoomId = 0.obs;
   RxString selectedRoom = ''.obs;
   RxString selectedFloor = ''.obs;
+  late TimeOfDay selectedStartTime;
+  late TimeOfDay selectedEndTime;
+  RxString selectedDate = ''.obs;
+  RxString selectedPurpose = ''.obs;
+  RxList selectedParticipantsId = [].obs;
 
   //For get all RoomsGetModels
   RxInt? id;
@@ -33,6 +39,11 @@ class CreateMeetingUserController extends GetxController {
 
   List<RoomsGetModel> roomListObj = [];
   List<GetAllUserDetailsModel> userListObj = [];
+
+  String _formatTime(TimeOfDay timeOfDay) {
+    // Format TimeOfDay as HH:mm
+    return '${timeOfDay.hour}:${timeOfDay.minute}';
+  }
 
 //For GET ROOMS
   Future getRooms() async {
@@ -84,22 +95,39 @@ class CreateMeetingUserController extends GetxController {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${AppController.accessToken}',
       },
+      // body: json.encode({
+      //   "roomId": 1,
+      //   "date": "2024-02-16",
+      //   "startTime": "13:00",
+      //   "endTime": "13:50",
+      //   "meetingType": "Internal",
+      //   // "meetingType": "External",
+      //   "purpose": "interview",
+      //   // "purpose": "meeting"
+      //   // "participant": "[1, 2, 3]" //these will be particpants id with selected value
+      // }),
+
+      //Testing below json encode
+
       body: json.encode({
-        "roomId": 1,
-        "date": "2024-02-16",
-        "startTime": "13:00",
-        "endTime": "13:50",
-        "meetingType": "Internal",
-        // "meetingType": "External",
-        "purpose": "interview",
-        // "purpose": "meeting"
-        // "participant": "[1, 2, 3]" //these will be particpants id with selected value
+        "roomId": selectedRoomId.value,
+        "date": selectedDate.value.split(' ')[0],
+        "startTime": '${selectedStartTime.hour}:${selectedStartTime.minute}',
+        "endTime": '${selectedEndTime.hour}:${selectedEndTime.minute}',
+        "meetingType": selectedMeetingType.value,
+
+        "purpose": selectedPurpose.value,
+
+        "participant": selectedParticipantsId.value.toString() ??
+            '[]' //these will be particpants id with selected value
       }),
     );
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
       // updateStatus = result['message'];
       bool? status = result['status'];
+      String title = result['title'];
+      String message = result['message'];
 
       if (status == true) {
         Get.defaultDialog(
@@ -109,13 +137,32 @@ class CreateMeetingUserController extends GetxController {
           confirmTextColor: Colors.white,
           onConfirm: () async {
             Get.back(); // Close the dialog
-            // Get.offAll(QRScannerScreen());
+            Get.offAll(MyMeetingsScreen(
+              title: 'My Meetings',
+            ));
           },
         );
-      } else {
+      }
+    } else if (response.statusCode != 200) {
+      Map<String, dynamic> result = json.decode(response.body);
+      bool? status = result['status'];
+      String title = result['title'];
+      String message = result['message'];
+
+      if (title == 'Validation Failed') {
         Get.defaultDialog(
           title: "Error",
-          middleText: "Could not create",
+          middleText: "$message",
+          textConfirm: "OK",
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+            Get.back(); // Close the dialog
+          },
+        );
+      } else if (title == 'Unauthorized') {
+        Get.defaultDialog(
+          title: "Error",
+          middleText: "$message \nplease re login",
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () {

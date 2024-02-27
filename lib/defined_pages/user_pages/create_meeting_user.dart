@@ -186,33 +186,42 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               },
                             ),
                             const SizedBox(height: 16),
-                            DropdownButtonFormField<String>(
+                            DropdownButtonFormField<int>(
                               decoration: InputDecoration(
                                 labelText: 'Select Room',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              value: _selectedRoom,
+                              value: _selectedRoomId
+                                  ?.id, // Use the id as the value
                               onChanged: (value) {
                                 setState(() {
-                                  _selectedRoom = value;
-                                  // _selectedRoomId = mc.roomListObj.firstWhere(
-                                  //     (element) => element.id == value);
+                                  _selectedRoomId = mc.roomListObj.firstWhere(
+                                    (element) => element.id == value,
+                                  );
+
+                                  _selectedRoom = _selectedRoomId
+                                      ?.name; // Update _selectedRoom with the name
+
+                                  setRoomDetails(_selectedRoom);
+                                  // mc.selectedRoomId.value = _selectedRoomId;
+
+                                  mc.selectedRoomId.value = _selectedRoomId?.id;
+                                  print(_selectedRoomId);
                                 });
                                 // Fetch and set room details based on the selected room
-                                setRoomDetails(value);
                               },
                               items: mc.roomListObj
                                   .map(
                                     (item) => DropdownMenuItem(
-                                      value: item.name.toString(),
-                                      child: Text(item.name.toString()),
+                                      value: item.id,
+                                      child: Text(item.name),
                                     ),
                                   )
                                   .toList(),
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
+                                if (value == null) {
                                   return 'Please select meeting room';
                                 }
                                 return null;
@@ -313,9 +322,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                               if (result != null) {
                                                 setState(() {
                                                   _startTime = result;
+                                                  mc.selectedStartTime = result;
                                                 });
-                                                mc.startTime.value =
-                                                    result.toString();
                                               }
                                             },
                                             icon: const Icon(Icons.access_time),
@@ -354,9 +362,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                               if (result != null) {
                                                 setState(() {
                                                   _endTime = result;
+                                                  mc.selectedEndTime = result;
                                                 });
-                                                mc.endTime.value =
-                                                    result.toString();
                                               }
                                             },
                                             icon: const Icon(Icons.access_time),
@@ -395,8 +402,9 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                 if (pickedDate != null && pickedDate != _date) {
                                   setState(() {
                                     _date = pickedDate;
+                                    mc.selectedDate.value =
+                                        pickedDate.toString();
                                   });
-                                  mc.date.value = pickedDate.toString();
                                 }
                               },
                             ),
@@ -415,7 +423,7 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                   if (_purpose != 'Meeting') {
                                     _selectedParticipants = null;
                                   }
-                                  mc.purpose.value = value.toString();
+                                  mc.selectedPurpose.value = value.toString();
                                 });
                               },
                               items: <String>[
@@ -460,7 +468,7 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                     setState(() {
                                       _selectedParticipants = values;
                                       // Assuming participantsList is a List<GetAllUserDetailsModel>
-                                      List<dynamic> selectedIds =
+                                      mc.selectedParticipantsId.value =
                                           _selectedParticipants!
                                               .map((selectedName) =>
                                                   participantsList
@@ -473,7 +481,7 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                               .toList();
 
                                       // Now, selectedIds contains the ids of the selected participants
-                                      print(selectedIds);
+                                      // print(selectedIds);
                                     });
                                   },
                                   title: const Text('Select Participants'),
