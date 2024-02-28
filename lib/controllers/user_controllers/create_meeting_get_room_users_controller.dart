@@ -37,6 +37,8 @@ class CreateMeetingUserController extends GetxController {
   RxString? seatingCapacity;
   RxString? roomDetails;
 
+  RxBool status = false.obs;
+
   List<RoomsGetModel> roomListObj = [];
   List<GetAllUserDetailsModel> userListObj = [];
 
@@ -80,8 +82,14 @@ class CreateMeetingUserController extends GetxController {
       Map<String, dynamic> result = json.decode(response.body);
       List<dynamic> data = result['data'];
 
-      userListObj =
-          data.map((e) => GetAllUserDetailsModel.fromJson(e)).toList();
+      // userListObj =
+      //     data.map((e) => GetAllUserDetailsModel.fromJson(e)).toList();
+      userListObj = data
+          .map((e) => GetAllUserDetailsModel.fromJson(e))
+          .where((participant) =>
+              participant.id != AppController.mainUid &&
+              !(participant.role == 'superAdmin'))
+          .toList();
 
       return userListObj;
     }
@@ -136,7 +144,6 @@ class CreateMeetingUserController extends GetxController {
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () async {
-            Get.back(); // Close the dialog
             Get.offAll(MyMeetingsScreen(
               title: 'My Meetings',
             ));

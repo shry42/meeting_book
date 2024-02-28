@@ -1,21 +1,39 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:http/http.dart' as http;
+import 'package:room_booking_app/api_services/api_service.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
+import 'package:room_booking_app/controllers/user_controllers/delete_meeting_controller.dart';
+import 'package:room_booking_app/controllers/user_controllers/delete_participant_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/get_meeting_participants_controller.dart';
-import 'package:room_booking_app/controllers/user_controllers/my_meetings_get_controller.dart';
 import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
-import 'package:room_booking_app/defined_pages/user_pages/participants_meet_list.dart';
-import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
+import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class MyMeetingsScreen extends StatelessWidget {
-  MyMeetingsScreen({super.key, required this.title});
+class ParticipantsMeetListScreen extends StatefulWidget {
+  ParticipantsMeetListScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
-  final MyMeetingsGetController meetCont = MyMeetingsGetController();
+  @override
+  State<ParticipantsMeetListScreen> createState() =>
+      _ParticipantsMeetListScreenState();
+}
 
+class _ParticipantsMeetListScreenState
+    extends State<ParticipantsMeetListScreen> {
+  final GetMeetingParticipantsController pc =
+      GetMeetingParticipantsController();
+
+  final DeleteMeetingController dc = DeleteMeetingController();
+
+  final DeleteParticipantController dpc = DeleteParticipantController();
+
+  // get doNothing => null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +66,7 @@ class MyMeetingsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -68,9 +86,8 @@ class MyMeetingsScreen extends StatelessWidget {
                     // This is the default value
                     direction: const ShimmerDirection.fromLTRB(),
                     child: GestureDetector(
-                      onTap: () {
-                        Get.to(
-                            const CreateMeetingsUser(title: 'Create Meetings'));
+                      onTap: () async {
+                        await dc.deleteMeeting();
                       },
                       child: Container(
                         height: 30,
@@ -85,9 +102,11 @@ class MyMeetingsScreen extends StatelessWidget {
                           children: [
                             Center(
                               child: Text(
-                                'Create Meetings',
+                                'Delete meeting',
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 12),
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
                           ],
@@ -100,41 +119,9 @@ class MyMeetingsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 45,
-            width: 360,
-            child: TextField(
-              // controller: searchController,
-              onChanged: (value) {
-                // setState(() {
-                //   if (value.isEmpty) {
-                //     dataList = mainDataList; // Reset to show all data
-                //   } else {
-                //     dataList = mainDataList
-                //         ?.where((element) => element.POTxnID.toString()
-                //             .contains(value.toString()))
-                //         .toList();
-                //   }
-                // });
-              },
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 233, 239, 226),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Search for meeting",
-                prefixIcon: const Icon(Icons.search),
-                prefixIconColor: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
           Expanded(
-              child: Expanded(
             child: FutureBuilder(
-              future: meetCont.getMeetDetails(),
+              future: pc.getParticipantsMeetList(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -145,7 +132,7 @@ class MyMeetingsScreen extends StatelessWidget {
                         SizedBox(height: 50),
                         CircularProgressIndicator(),
                         SizedBox(height: 10),
-                        Text('Loading Meetings...'),
+                        Text('Loading Participants...'),
                       ],
                     ),
                   );
@@ -159,7 +146,7 @@ class MyMeetingsScreen extends StatelessWidget {
                         Icon(Icons.error, color: Colors.red),
                         SizedBox(height: 60),
                         Text(
-                            'Error loading meetings\nPlease try again by logging out'),
+                            '    Error loading participants\nPlease try again by logging out'),
                       ],
                     ),
                   );
@@ -170,49 +157,50 @@ class MyMeetingsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 65),
-                        Text('No Meetings to show\n       Create one!'),
+                        Text(
+                            'No participants to show\n              try again!'),
                       ],
                     ),
                   );
                 } else {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (ctx, index) => GestureDetector(
-                            onTap: () async {
-                              int meetingId = snapshot.data[index].id;
-                              AppController.setmeetingId(meetingId);
-                              Get.to(ParticipantsMeetListScreen(
-                                  title: 'Participants List'));
-                            },
-                            child: MyMeetingsUserCard(
-                              ht: 200,
-                              wd: 350,
-                              duration: 1,
-                              userName:
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (ctx, index) => Container(
+                        margin: const EdgeInsets.only(bottom: 8.0),
+                        child: ListTile(
+                          tileColor: const Color.fromARGB(255, 175, 233, 108),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
                                   '${snapshot.data[index].firstName} ${snapshot.data[index].lastName}',
-                              roomName: snapshot.data[index].name.toString(),
-                              date: snapshot.data[index].date.toString(),
-                              startTime:
-                                  snapshot.data[index].startTime.toString(),
-                              endTime: snapshot.data[index].endTime.toString(),
-                              suggestion:
-                                  snapshot.data[index].suggestion.toString(),
-                              additionalComments: snapshot
-                                  .data[index].additionalComments
-                                  .toString(),
-                            ),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
+                          trailing: GestureDetector(
+                              onTap: () async {
+                                int userId = snapshot.data[index].id;
+                                AppController.setParticipantId(userId);
+                                await dpc.deleteParticipantMeeting();
+                                setState(() {});
+                              },
+                              child: (snapshot.data[index].id !=
+                                      AppController.mainUid)
+                                  ? Icon(Icons.delete)
+                                  : SizedBox()),
                         ),
                       ),
-                    ],
+                    ),
                   );
                 }
               },
             ),
-          ))
+          ),
         ],
       ),
     );

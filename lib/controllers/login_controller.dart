@@ -30,12 +30,14 @@ class loginController extends GetxController {
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
       user = UserDetails.fromJson(result['userDetails']);
-      AppController.setmessage(null);
+      // AppController.setmessage(null);
 
       // // List userValue = result['userDeatils'];
       // // emailId.value = userValue[0]['emailId'];
 
       token = result['token'];
+      int mainUid = user!.id;
+      AppController.setMainUid(mainUid);
       print('******$token');
       AppController.setaccessToken(token);
 
