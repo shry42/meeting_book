@@ -23,18 +23,6 @@ class DeleteParticipantController extends GetxController {
       Map<String, dynamic> result = json.decode(response.body);
       bool? status = result['status'];
       String message = result['message'];
-
-      // if (status == true) {
-      //   Get.defaultDialog(
-      //     title: "Success",
-      //     middleText: "$message",
-      //     textConfirm: "OK",
-      //     confirmTextColor: Colors.white,
-      //     onConfirm: () {
-      //       Get.back(); // Close the dialog
-      //     },
-      //   );
-      // }
     } else if (response.statusCode != 200) {
       Map<String, dynamic> result = json.decode(response.body);
       bool? status = result['status'];

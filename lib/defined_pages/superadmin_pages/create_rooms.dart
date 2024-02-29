@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:room_booking_app/controllers/superadmin_controllers/create_room_controller.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/rooms_list.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class CreateRoomScreen extends StatelessWidget {
-  const CreateRoomScreen({super.key, required this.title});
+class CreateRoomScreen extends StatefulWidget {
+  CreateRoomScreen({super.key, required this.title});
 
   final String title;
+
+  @override
+  State<CreateRoomScreen> createState() => _CreateRoomScreenState();
+}
+
+class _CreateRoomScreenState extends State<CreateRoomScreen> {
+  TextEditingController roomNameController = TextEditingController();
+
+  TextEditingController floorController = TextEditingController();
+
+  TextEditingController seatingCapacityController = TextEditingController();
+
+  TextEditingController roomDetailsController = TextEditingController();
+
+  TextEditingController meetingTypeController = TextEditingController();
+
+  final CreateRoomController crc = CreateRoomController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +62,7 @@ class CreateRoomScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -63,7 +82,7 @@ class CreateRoomScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: roomNameController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -106,7 +125,7 @@ class CreateRoomScreen extends StatelessWidget {
                             onChanged: (String? newValue) {
                               state.didChange(newValue);
                             },
-                            items: <String>['Ground', 'First', 'Third']
+                            items: <String>['Ground', 'First', 'Second']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -125,12 +144,13 @@ class CreateRoomScreen extends StatelessWidget {
                     },
                   ),
                 ),
+
                 Padding(
                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: seatingCapacityController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -157,7 +177,7 @@ class CreateRoomScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: roomDetailsController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -190,7 +210,7 @@ class CreateRoomScreen extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          labelText: 'Select meeting Type',
+                          labelText: 'Select Meeting Type',
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
@@ -215,7 +235,7 @@ class CreateRoomScreen extends StatelessWidget {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty || value == "") {
-                        return 'Please meeting type';
+                        return 'Please select meeting type';
                       }
                       return null;
                     },
@@ -244,7 +264,24 @@ class CreateRoomScreen extends StatelessWidget {
                         color: Colors.greenAccent,
                         borderRadius: BorderRadius.circular(30)),
                     child: ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        // Retrieve values from controllers
+                        String roomName = roomNameController.text;
+                        String floor = floorController.text;
+                        int seatingCapacity =
+                            int.tryParse(seatingCapacityController.text) ?? 0;
+                        String roomDetails = roomDetailsController.text;
+                        String meetingType = meetingTypeController.text;
+
+                        // Call createRoom method
+                        await crc.createRoom(
+                          roomName,
+                          floor,
+                          roomDetails,
+                          meetingType,
+                          seatingCapacity,
+                        );
+                      },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -272,16 +309,6 @@ class CreateRoomScreen extends StatelessWidget {
           ),
         ]),
       ),
-
-      // body: Center(
-      //   child: Text(
-      //     title,
-      //     style: const TextStyle(
-      //       fontSize: 100,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

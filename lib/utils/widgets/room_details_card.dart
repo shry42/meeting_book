@@ -10,6 +10,8 @@ class RoomDetailsCard extends StatelessWidget {
     this.name,
     this.floor,
     this.seatingCapacity,
+    this.roomDetails,
+    this.meetingType,
   }) : super(key: key);
 
   final double? ht;
@@ -18,6 +20,8 @@ class RoomDetailsCard extends StatelessWidget {
   final String? name;
   final String? floor;
   final String? seatingCapacity;
+  final String? roomDetails;
+  final String? meetingType;
 
   @override
   Widget build(BuildContext context) {
@@ -71,23 +75,6 @@ class RoomDetailsCard extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          'Name :  $name',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 3, left: 18),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Text(
                           'Floor :  $floor',
                           style: const TextStyle(
                             fontSize: 18,
@@ -105,7 +92,41 @@ class RoomDetailsCard extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          'Seating Capacity :  $seatingCapacity',
+                          'Seating capacity :  $seatingCapacity',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 18),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Room details :  $roomDetails',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 18),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Meeting Type :  $meetingType',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

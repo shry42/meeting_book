@@ -15,9 +15,9 @@ class BottomNaviagtionBarScreen extends StatelessWidget {
 
   List pages = [
     // const DumBottomNaviagtionBar(title: 'Reservations'),
-    const ReservationScreen(title: 'Reservations'),
+    ReservationScreen(title: 'Reservations'),
     // const DumBottomNaviagtionBar(title: 'Add user'),
-    const AddUserScreen(title: 'Add User'),
+    AddUserScreen(title: 'Add User'),
     // const DumBottomNaviagtionBar(title: 'Create Room'),
     const RoomsListScreen(title: 'Rooms list'),
     // const DumBottomNaviagtionBar(title: 'Update User'),

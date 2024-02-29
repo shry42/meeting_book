@@ -2,12 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:room_booking_app/controllers/superadmin_controllers/add_user_controller.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class AddUserScreen extends StatelessWidget {
-  const AddUserScreen({super.key, required this.title});
+  AddUserScreen({super.key, required this.title});
 
   final String title;
+
+  final AddUserController auc = AddUserController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileNoController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPassCont = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +71,7 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: firstNameController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -89,7 +99,7 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: lastNameController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -116,7 +126,7 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: emailController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -143,7 +153,7 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: mobileNoController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -170,7 +180,7 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: passwordController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -197,14 +207,14 @@ class AddUserScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: confirmPassCont,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
                     },
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -241,7 +251,15 @@ class AddUserScreen extends StatelessWidget {
                         color: Colors.greenAccent,
                         borderRadius: BorderRadius.circular(30)),
                     child: ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        await auc.addUser(
+                            firstNameController.text.toString(),
+                            lastNameController.text,
+                            emailController.text,
+                            mobileNoController.text,
+                            passwordController.text,
+                            confirmPassCont.text);
+                      },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

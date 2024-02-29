@@ -1,14 +1,47 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
-import 'package:room_booking_app/defined_pages/superadmin_pages/reset_password_dialog.dart';
+import 'package:room_booking_app/controllers/superadmin_controllers/update_user_controller.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class UpdateUserScreen extends StatelessWidget {
-  const UpdateUserScreen({super.key, required this.title});
+class UpdateUserScreen extends StatefulWidget {
+  UpdateUserScreen(
+      {super.key,
+      required this.title,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.mobileNo,
+      required this.id});
 
-  final String title;
+  final String title, firstName, lastName, email, mobileNo;
+  final int id;
+
+  @override
+  State<UpdateUserScreen> createState() => _UpdateUserScreenState();
+}
+
+class _UpdateUserScreenState extends State<UpdateUserScreen> {
+  final UpdateUserController uuc = UpdateUserController();
+
+  final TextEditingController firstNameController = TextEditingController();
+
+  final TextEditingController lastNameController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController mobileNoController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the controllers with the provided values
+    firstNameController.text = widget.firstName;
+    lastNameController.text = widget.lastName;
+    emailController.text = widget.email;
+    mobileNoController.text = widget.mobileNo;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +49,6 @@ class UpdateUserScreen extends StatelessWidget {
       // shadowColor: Colors.black87,
       // elevation: 1,
       backgroundColor: const Color.fromARGB(255, 213, 231, 214),
-
       body: SingleChildScrollView(
         child: Column(children: [
           const SizedBox(height: 40),
@@ -45,57 +77,13 @@ class UpdateUserScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Spacer(),
-                  Shimmer(
-                    duration: const Duration(seconds: 2),
-                    // This is NOT the default value. Default value: Duration(seconds: 0)
-                    interval: const Duration(milliseconds: 20),
-                    // This is the default value
-                    color: Colors.white,
-                    // This is the default value
-                    colorOpacity: 1,
-                    // This is the default value
-                    enabled: true,
-                    // This is the default value
-                    direction: const ShimmerDirection.fromLTRB(),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(Get.defaultDialog(
-                          backgroundColor:
-                              const Color.fromARGB(255, 213, 231, 214),
-                          title: 'Change Password',
-                          content: DialogBox(),
-                        ));
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            color: Colors.white70,
-                            borderRadius: BorderRadius.circular(6)),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                'Change Password',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  const Spacer(),
                   const SizedBox(width: 10),
                 ],
               ),
@@ -107,6 +95,8 @@ class UpdateUserScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
             child: TextFormField(
               // controller: emailController,
+              controller: firstNameController,
+              // initialValue: widget.firstName,
               onChanged: (value) {
                 // AppController.setemailId(emailController.text);
                 // c.userName.value = emailController.text;
@@ -118,6 +108,7 @@ class UpdateUserScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 labelText: 'First Name',
+
                 // hintText: 'username',
               ),
               validator: (value) {
@@ -133,7 +124,8 @@ class UpdateUserScreen extends StatelessWidget {
             //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
             child: TextFormField(
-              // controller: emailController,
+              controller: lastNameController,
+              // initialValue: widget.lastName,
               onChanged: (value) {
                 // AppController.setemailId(emailController.text);
                 // c.userName.value = emailController.text;
@@ -159,7 +151,8 @@ class UpdateUserScreen extends StatelessWidget {
             //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
             child: TextFormField(
-              // controller: emailController,
+              controller: emailController,
+              // initialValue: widget.email,
               onChanged: (value) {
                 // AppController.setemailId(emailController.text);
                 // c.userName.value = emailController.text;
@@ -185,7 +178,8 @@ class UpdateUserScreen extends StatelessWidget {
             //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
             child: TextFormField(
-              // controller: emailController,
+              controller: mobileNoController,
+              // initialValue: widget.mobileNo,
               onChanged: (value) {
                 // AppController.setemailId(emailController.text);
                 // c.userName.value = emailController.text;
@@ -227,7 +221,15 @@ class UpdateUserScreen extends StatelessWidget {
                   color: Colors.greenAccent,
                   borderRadius: BorderRadius.circular(30)),
               child: ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  await uuc.updateUserDetails(
+                    firstNameController.text,
+                    lastNameController.text,
+                    emailController.text,
+                    mobileNoController.text,
+                    widget.id,
+                  );
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

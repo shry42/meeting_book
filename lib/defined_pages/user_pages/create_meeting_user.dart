@@ -5,7 +5,6 @@ import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:room_booking_app/controllers/user_controllers/create_meeting_get_room_users_controller.dart';
-import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -375,12 +374,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                           text:
                                               '${_endTime.hour}:${_endTime.minute}',
                                         ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Please select end time';
-                                          }
-                                          return null;
-                                        },
                                       ),
                                     ],
                                   ),
@@ -416,8 +409,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please select date';
-                                } else if (_date.isBefore(DateTime.now())) {
                                   return 'Please select date';
                                 }
                                 return null;
@@ -545,23 +536,13 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   await mc.createMeetingUser();
-                                  if (mc.status == true) {
-                                    Get.defaultDialog(
-                                      title: "Success",
-                                      middleText:
-                                          "Meeting created successfully\n  click to view meetings",
-                                      textConfirm: "OK",
-                                      confirmTextColor: Colors.white,
-                                      onConfirm: () async {
-                                        Get.offAll(MyMeetingsScreen(
-                                          title: 'My Meetings',
-                                        ));
-                                      },
-                                    );
-                                  }
                                 }
                               },
-                              child: const Text('Submit'),
+                              child: const Text(
+                                'Create now',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black),
+                              ),
                             ),
                           ],
                         ),

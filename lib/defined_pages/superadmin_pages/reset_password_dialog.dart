@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:room_booking_app/controllers/password_reset_controller.dart';
 import 'package:room_booking_app/utils/toast_service.dart';
 
 class DialogBox extends StatelessWidget {
@@ -7,7 +8,7 @@ class DialogBox extends StatelessWidget {
   TextEditingController confirmPassController = TextEditingController();
   // final PasswordController pc = Get.put(PasswordController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final PasswordResetcontroller prc = PasswordResetcontroller();
   DialogBox({super.key});
 
   @override
@@ -18,7 +19,7 @@ class DialogBox extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             decoration: InputDecoration(
-              labelText: 'NewPassword',
+              labelText: 'New Password',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -26,7 +27,7 @@ class DialogBox extends StatelessWidget {
             obscureText: true,
             controller: newPassController,
             onChanged: (value) {
-              // pc.newPassword.value = newPassController.text;
+              prc.newPassword.value = newPassController.text;
             },
           ),
         ),
@@ -34,7 +35,7 @@ class DialogBox extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             decoration: InputDecoration(
-              labelText: 'ConfirmPassword',
+              labelText: 'Confirm Password',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -42,7 +43,7 @@ class DialogBox extends StatelessWidget {
             controller: confirmPassController,
             obscureText: true,
             onChanged: (value) {
-              // pc.confirmPssword.value = confirmPassController.text;
+              prc.confirmPssword.value = confirmPassController.text;
             },
           ),
         ),
@@ -50,15 +51,26 @@ class DialogBox extends StatelessWidget {
           height: 10,
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(
+                255, 195, 216, 201), // Change the button color here
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
           onPressed: () async {
             if (newPassController.text == confirmPassController.text) {
-              // await pc.changePassword();
+              await prc.changePassword();
               Get.back();
             } else {
               toast("Both passwords did not match!");
             }
           },
-          child: const Text("Update password"),
+          child: const Text(
+            "Update Password",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
         ),
       ],
     );

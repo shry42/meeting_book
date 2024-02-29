@@ -17,9 +17,9 @@ class myScreen extends StatelessWidget {
 
   List pages = [
     // const DummyScreen(title: 'Reservations'),
-    const ReservationScreen(title: 'Reservations'),
+    ReservationScreen(title: 'Reservations'),
     // const DummyScreen(title: 'Add user'),
-    const AddUserScreen(title: 'Add User'),
+    AddUserScreen(title: 'Add User'),
     // const DummyScreen(title: 'Create Room'),
     const RoomsListScreen(title: 'Rooms list'),
     // const DummyScreen(title: 'Update User'),

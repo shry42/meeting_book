@@ -14,6 +14,8 @@ class MyMeetingsUserCard extends StatelessWidget {
     required this.endTime,
     required this.suggestion,
     required this.additionalComments,
+    required this.purpose,
+    required this.meetingType,
   }) : super(key: key);
 
   final double? ht;
@@ -24,6 +26,8 @@ class MyMeetingsUserCard extends StatelessWidget {
   final String date;
   final String startTime;
   final String endTime;
+  final String purpose;
+  final String meetingType;
   final String suggestion;
   final String additionalComments;
 
@@ -131,6 +135,40 @@ class MyMeetingsUserCard extends StatelessWidget {
                       Flexible(
                         child: Text(
                           'EndTime :  $endTime',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 18),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Purpose :  $purpose',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 18),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Meeting Type :  $meetingType',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

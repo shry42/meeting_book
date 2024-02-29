@@ -1,13 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
-import 'package:room_booking_app/defined_pages/superadmin_pages/rooms_list.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class UpdateRoomsScreen extends StatelessWidget {
-  const UpdateRoomsScreen({super.key, required this.title});
+class UpdateRoomsScreen extends StatefulWidget {
+  UpdateRoomsScreen(
+      {super.key,
+      required this.title,
+      required this.name,
+      required this.floor,
+      required this.seatingCapacity,
+      required this.roomDetails,
+      required this.meetingType});
 
   final String title;
+  final String name, floor, roomDetails, meetingType;
+  final int seatingCapacity;
+
+  @override
+  State<UpdateRoomsScreen> createState() => _UpdateRoomsScreenState();
+}
+
+class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController floorController = TextEditingController();
+
+  final TextEditingController seatingCapacityController =
+      TextEditingController();
+
+  final TextEditingController roomDetailsController = TextEditingController();
+
+  final TextEditingController meetingTypeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Set initial values for the controllers
+    nameController.text = widget.name;
+    floorController.text = widget.floor;
+    seatingCapacityController.text = widget.seatingCapacity.toString();
+    roomDetailsController.text = widget.roomDetails;
+    meetingTypeController.text = widget.meetingType;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +78,7 @@ class UpdateRoomsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -101,7 +136,7 @@ class UpdateRoomsScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: nameController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -119,7 +154,6 @@ class UpdateRoomsScreen extends StatelessWidget {
                       if (value == null || value.isEmpty || value == "") {
                         return 'Please enter a valid room name';
                       }
-
                       return null;
                     },
                   ),
@@ -140,10 +174,13 @@ class UpdateRoomsScreen extends StatelessWidget {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: state.value,
+                            value: floorController.text,
                             isDense: true,
                             onChanged: (String? newValue) {
-                              state.didChange(newValue);
+                              // Update the value in the controller
+                              setState(() {
+                                floorController.text = newValue ?? '';
+                              });
                             },
                             items: <String>['Ground', 'First', 'Third']
                                 .map<DropdownMenuItem<String>>((String value) {
@@ -169,7 +206,7 @@ class UpdateRoomsScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: seatingCapacityController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -186,7 +223,6 @@ class UpdateRoomsScreen extends StatelessWidget {
                       if (value == null || value.isEmpty || value == "") {
                         return 'Please enter a valid capacity';
                       }
-
                       return null;
                     },
                   ),
@@ -196,7 +232,7 @@ class UpdateRoomsScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFormField(
-                    // controller: emailController,
+                    controller: roomDetailsController,
                     onChanged: (value) {
                       // AppController.setemailId(emailController.text);
                       // c.userName.value = emailController.text;
@@ -213,7 +249,6 @@ class UpdateRoomsScreen extends StatelessWidget {
                       if (value == null || value.isEmpty || value == "") {
                         return 'Please enter a room specifications';
                       }
-
                       return null;
                     },
                   ),
@@ -234,10 +269,13 @@ class UpdateRoomsScreen extends StatelessWidget {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: state.value,
+                            value: meetingTypeController.text,
                             isDense: true,
                             onChanged: (String? newValue) {
-                              state.didChange(newValue);
+                              // Update the value in the controller
+                              setState(() {
+                                meetingTypeController.text = newValue ?? '';
+                              });
                             },
                             items: <String>[
                               'External',

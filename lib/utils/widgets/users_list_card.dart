@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class UpdateUserCard extends StatelessWidget {
-  const UpdateUserCard({
+class UsersListCard extends StatelessWidget {
+  const UsersListCard({
     Key? key,
     this.ht,
     this.wd,

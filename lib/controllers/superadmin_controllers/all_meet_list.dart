@@ -1,19 +1,17 @@
 import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:room_booking_app/api_services/api_service.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
-import 'package:room_booking_app/models/user_model/get_all_user_model.dart';
+import 'package:room_booking_app/models/user_model/my_meetings_get_model.dart';
 
-import '../../models/user_model/get_all_rooms_model.dart';
+class AllMeetingsGetController extends GetxController {
+  List<MyMeetingsGetModel> allMeetListObj = [];
 
-class GetAllUsersController extends GetxController {
-  List<GetAllUserDetailsModel> userListObj = [];
-
-  Future getUsers() async {
-    // throw Exception();
+  Future getAllMeetDetails() async {
     http.Response response = await http.get(
-      Uri.parse('${ApiService.baseUrl}/api/users/allUser'),
+      Uri.parse('${ApiService.baseUrl}/api/rooms/getAllMeetings'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${AppController.accessToken}',
@@ -23,10 +21,9 @@ class GetAllUsersController extends GetxController {
       Map<String, dynamic> result = json.decode(response.body);
       List<dynamic> data = result['data'];
 
-      userListObj =
-          data.map((e) => GetAllUserDetailsModel.fromJson(e)).toList();
+      allMeetListObj = data.map((e) => MyMeetingsGetModel.fromJson(e)).toList();
 
-      return userListObj;
+      return allMeetListObj;
     }
   }
 }

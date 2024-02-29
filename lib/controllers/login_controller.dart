@@ -37,11 +37,13 @@ class loginController extends GetxController {
 
       token = result['token'];
       int mainUid = user!.id;
+      role = user!.role;
+      String roles = user!.role;
       AppController.setMainUid(mainUid);
+      AppController.setRole(roles);
       print('******$token');
       AppController.setaccessToken(token);
 
-      role = user!.role;
       // AppController.setRole(role);
       // // Get.offAll(UserDetailsScreen());
     }

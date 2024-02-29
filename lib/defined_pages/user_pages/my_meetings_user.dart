@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
-import 'package:room_booking_app/controllers/user_controllers/get_meeting_participants_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/my_meetings_get_controller.dart';
+import 'package:room_booking_app/defined_pages/superadmin_pages/reset_password_dialog.dart';
 import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
 import 'package:room_booking_app/defined_pages/user_pages/participants_meet_list.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
@@ -95,6 +95,50 @@ class MyMeetingsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  Shimmer(
+                    duration: const Duration(seconds: 2),
+                    // This is NOT the default value. Default value: Duration(seconds: 0)
+                    interval: const Duration(milliseconds: 20),
+                    // This is the default value
+                    color: Colors.white,
+                    // This is the default value
+                    colorOpacity: 1,
+                    // This is the default value
+                    enabled: true,
+                    // This is the default value
+                    direction: const ShimmerDirection.fromLTRB(),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(Get.defaultDialog(
+                          backgroundColor: Color.fromARGB(255, 195, 215, 196),
+                          title: 'Reset Password !',
+                          content: DialogBox(),
+                        ));
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            border: Border.all(),
+                            color: Colors.white70,
+                            borderRadius: BorderRadius.circular(6)),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                'Reset Password',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -132,7 +176,6 @@ class MyMeetingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Expanded(
-              child: Expanded(
             child: FutureBuilder(
               future: meetCont.getMeetDetails(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
@@ -188,7 +231,7 @@ class MyMeetingsScreen extends StatelessWidget {
                                   title: 'Participants List'));
                             },
                             child: MyMeetingsUserCard(
-                              ht: 200,
+                              ht: 250,
                               wd: 350,
                               duration: 1,
                               userName:
@@ -198,6 +241,9 @@ class MyMeetingsScreen extends StatelessWidget {
                               startTime:
                                   snapshot.data[index].startTime.toString(),
                               endTime: snapshot.data[index].endTime.toString(),
+                              purpose: snapshot.data[index].purpose.toString(),
+                              meetingType:
+                                  snapshot.data[index].meetingType.toString(),
                               suggestion:
                                   snapshot.data[index].suggestion.toString(),
                               additionalComments: snapshot
@@ -212,7 +258,7 @@ class MyMeetingsScreen extends StatelessWidget {
                 }
               },
             ),
-          ))
+          )
         ],
       ),
     );

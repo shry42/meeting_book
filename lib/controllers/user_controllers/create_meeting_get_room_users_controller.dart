@@ -132,9 +132,8 @@ class CreateMeetingUserController extends GetxController {
     );
     if (response.statusCode == 200) {
       Map<String, dynamic> result = json.decode(response.body);
-      // updateStatus = result['message'];
       bool? status = result['status'];
-      String title = result['title'];
+      // String title = result['title'];
       String message = result['message'];
 
       if (status == true) {
