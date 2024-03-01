@@ -166,6 +166,7 @@ class _RoomsListScreenState extends State<RoomsListScreen> {
                                 snapshot.data[index].roomDetails;
                             String meetingType =
                                 snapshot.data[index].meetingType;
+                            int id = snapshot.data[index].id;
                             Get.to(UpdateRoomsScreen(
                               title: 'Update Room',
                               name: name,
@@ -173,6 +174,7 @@ class _RoomsListScreenState extends State<RoomsListScreen> {
                               seatingCapacity: seatingCapacity,
                               roomDetails: roomDetails,
                               meetingType: meetingType,
+                              id: id,
                             ));
                           },
                           child: RoomDetailsCard(

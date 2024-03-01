@@ -35,8 +35,8 @@ class UpdateUserController extends GetxController {
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () {
-            // Get.back(); // Close the dialog
-            Get.offAll(const UserLists(title: 'UsersList'));
+            Get.back(); // Close the dialog
+            // Get.offAll(const UserLists(title: 'UsersList'));
           },
         );
       } else if (response.statusCode != 200) {

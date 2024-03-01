@@ -24,6 +24,7 @@ class AddUserScreen extends StatelessWidget {
       // automaticallyImplyLeading: false,
       // shadowColor: Colors.black87,
       // elevation: 1,
+      backgroundColor: const Color.fromARGB(255, 213, 231, 214),
       body: SingleChildScrollView(
         child: Column(children: [
           SizedBox(height: 40),
@@ -287,17 +288,6 @@ class AddUserScreen extends StatelessWidget {
           ),
         ]),
       ),
-
-      backgroundColor: Colors.transparent,
-      // body: Center(
-      //   child: Text(
-      //     title,
-      //     style: const TextStyle(
-      //       fontSize: 100,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

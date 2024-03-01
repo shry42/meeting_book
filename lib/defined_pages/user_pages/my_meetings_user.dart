@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smenus/dropdown.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/my_meetings_get_controller.dart';
+import 'package:room_booking_app/defined_pages/login_page.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/reset_password_dialog.dart';
 import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.dart';
 import 'package:room_booking_app/defined_pages/user_pages/participants_meet_list.dart';
@@ -96,48 +98,82 @@ class MyMeetingsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Shimmer(
-                    duration: const Duration(seconds: 2),
-                    // This is NOT the default value. Default value: Duration(seconds: 0)
-                    interval: const Duration(milliseconds: 20),
-                    // This is the default value
-                    color: Colors.white,
-                    // This is the default value
-                    colorOpacity: 1,
-                    // This is the default value
-                    enabled: true,
-                    // This is the default value
-                    direction: const ShimmerDirection.fromLTRB(),
-                    child: GestureDetector(
-                      onTap: () {
+                  // Shimmer(
+                  //   duration: const Duration(seconds: 2),
+                  //   // This is NOT the default value. Default value: Duration(seconds: 0)
+                  //   interval: const Duration(milliseconds: 20),
+                  //   // This is the default value
+                  //   color: Colors.white,
+                  //   // This is the default value
+                  //   colorOpacity: 1,
+                  //   // This is the default value
+                  //   enabled: true,
+                  //   // This is the default value
+                  //   direction: const ShimmerDirection.fromLTRB(),
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       Get.to(Get.defaultDialog(
+                  //         backgroundColor: Color.fromARGB(255, 195, 215, 196),
+                  //         title: 'Reset Password !',
+                  //         content: DialogBox(),
+                  //       ));
+                  //     },
+                  //     child: Container(
+                  //       height: 30,
+                  //       width: 100,
+                  //       decoration: BoxDecoration(
+                  //           border: Border.all(),
+                  //           color: Colors.white70,
+                  //           borderRadius: BorderRadius.circular(6)),
+                  //       child: const Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: Text(
+                  //               'Reset Password',
+                  //               style: TextStyle(
+                  //                   color: Colors.black, fontSize: 12),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      // Handle menu item selection
+                      if (value == 'changePassword') {
                         Get.to(Get.defaultDialog(
                           backgroundColor: Color.fromARGB(255, 195, 215, 196),
                           title: 'Reset Password !',
                           content: DialogBox(),
                         ));
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            color: Colors.white70,
-                            borderRadius: BorderRadius.circular(6)),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                'Reset Password',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
+                      } else if (value == 'logout') {
+                        Get.offAll(LoginPage());
+                        AppController.setMainUid(null);
+                        AppController.setRole(null);
+                        AppController.setParticipantId(null);
+                        AppController.setmeetingId(null);
+                        AppController.setaccessToken(null);
+                        AppController.setmessage(null);
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem<String>(
+                        value: 'changePassword',
+                        child: Text('Change Password'),
                       ),
+                      const PopupMenuItem<String>(
+                        value: 'logout',
+                        child: Text('Logout'),
+                      ),
+                    ],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
+                    color: Color.fromARGB(255, 233, 239, 227),
                   ),
                 ],
               ),

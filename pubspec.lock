@@ -94,6 +94,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_smenus:
+    dependency: "direct main"
+    description:
+      name: flutter_smenus
+      sha256: fe116fd9d599f5ef1e0c27ce300ab17e33b0513eab79cc8b73e04dd80e900ede
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

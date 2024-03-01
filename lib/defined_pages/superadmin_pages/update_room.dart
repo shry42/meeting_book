@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
+import 'package:room_booking_app/bottom_navigation/bottom_navigation_bar.dart';
+import 'package:room_booking_app/controllers/bottom_nav_controller.dart';
+import 'package:room_booking_app/controllers/superadmin_controllers/update_room_controller.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class UpdateRoomsScreen extends StatefulWidget {
-  UpdateRoomsScreen(
+  const UpdateRoomsScreen(
       {super.key,
       required this.title,
       required this.name,
       required this.floor,
       required this.seatingCapacity,
       required this.roomDetails,
-      required this.meetingType});
+      required this.meetingType,
+      required this.id});
 
   final String title;
   final String name, floor, roomDetails, meetingType;
-  final int seatingCapacity;
+  final int seatingCapacity, id;
 
   @override
   State<UpdateRoomsScreen> createState() => _UpdateRoomsScreenState();
@@ -31,6 +36,10 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
   final TextEditingController roomDetailsController = TextEditingController();
 
   final TextEditingController meetingTypeController = TextEditingController();
+
+  final UpdateRoomController urc = UpdateRoomController();
+
+  final BottomNavigationController bnc = BottomNavigationController();
 
   @override
   void initState() {
@@ -98,7 +107,16 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
                     // This is the default value
                     direction: const ShimmerDirection.fromLTRB(),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        await urc.updateRoomDetails(
+                            nameController.text,
+                            floorController.text,
+                            roomDetailsController.text,
+                            meetingTypeController.text,
+                            int.parse(seatingCapacityController.text),
+                            widget.id,
+                            0);
+                      },
                       child: Container(
                         height: 30,
                         width: 100,
@@ -182,7 +200,7 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
                                 floorController.text = newValue ?? '';
                               });
                             },
-                            items: <String>['Ground', 'First', 'Third']
+                            items: <String>['Ground', 'First', 'Second']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -322,7 +340,19 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
                         color: Colors.greenAccent,
                         borderRadius: BorderRadius.circular(30)),
                     child: ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        urc.updateRoomDetails(
+                            nameController.text,
+                            floorController.text,
+                            roomDetailsController.text,
+                            meetingTypeController.text,
+                            int.parse(seatingCapacityController.text),
+                            widget.id,
+                            1);
+                        Get.offAll(BottomNaviagtionBarScreen(
+                          initialIndex: 2,
+                        ));
+                      },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -342,6 +372,7 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
                     ),
                   ),
                 ),
+
                 const SizedBox(
                   height: 30,
                 ),
@@ -350,16 +381,6 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
           ),
         ]),
       ),
-
-      // body: Center(
-      //   child: Text(
-      //     title,
-      //     style: const TextStyle(
-      //       fontSize: 100,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

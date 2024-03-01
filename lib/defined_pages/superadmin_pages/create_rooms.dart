@@ -17,13 +17,14 @@ class CreateRoomScreen extends StatefulWidget {
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   TextEditingController roomNameController = TextEditingController();
 
-  TextEditingController floorController = TextEditingController();
+  TextEditingController floorController = TextEditingController(text: 'First');
 
   TextEditingController seatingCapacityController = TextEditingController();
 
   TextEditingController roomDetailsController = TextEditingController();
 
-  TextEditingController meetingTypeController = TextEditingController();
+  TextEditingController meetingTypeController =
+      TextEditingController(text: 'Internal');
 
   final CreateRoomController crc = CreateRoomController();
 
@@ -104,9 +105,10 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     },
                   ),
                 ),
+                // For floor
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: FormField<String>(
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
@@ -120,10 +122,12 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: state.value,
+                            value: floorController.text,
                             isDense: true,
                             onChanged: (String? newValue) {
-                              state.didChange(newValue);
+                              setState(() {
+                                floorController.text = newValue ?? '';
+                              });
                             },
                             items: <String>['Ground', 'First', 'Second']
                                 .map<DropdownMenuItem<String>>((String value) {
@@ -144,7 +148,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     },
                   ),
                 ),
-
                 Padding(
                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
                   padding:
@@ -214,10 +217,12 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            value: state.value,
+                            value: meetingTypeController.text,
                             isDense: true,
                             onChanged: (String? newValue) {
-                              state.didChange(newValue);
+                              setState(() {
+                                meetingTypeController.text = newValue ?? '';
+                              });
                             },
                             items: <String>[
                               'External',
@@ -242,7 +247,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                   ),
                 ),
 
-                // add buttton below
+                // Add buttton below
 
                 const SizedBox(height: 35),
                 Shimmer(

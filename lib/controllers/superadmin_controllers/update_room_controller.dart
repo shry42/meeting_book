@@ -7,8 +7,8 @@ import 'package:room_booking_app/controllers/app_controllers/app_main_controller
 import 'package:room_booking_app/defined_pages/superadmin_pages/users_list.dart';
 
 class UpdateRoomController extends GetxController {
-  Future updateRoomDetails(
-      String name, floor, roomDetails, meetingType, int seatingCapacity) async {
+  Future updateRoomDetails(String name, floor, roomDetails, meetingType,
+      int seatingCapacity, id, isActive) async {
     http.Response response = await http.post(
       Uri.parse('${ApiService.baseUrl}/api/rooms/updateRoom'),
       headers: {
@@ -17,8 +17,8 @@ class UpdateRoomController extends GetxController {
       },
       body: json.encode({
         "name": name,
-        "id": 1,
-        "isActive": 0,
+        "id": id,
+        "isActive": isActive,
         "floor": floor,
         "roomDetails": roomDetails,
         "meetingType": meetingType,
@@ -37,8 +37,8 @@ class UpdateRoomController extends GetxController {
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () {
-            // Get.back(); // Close the dialog
-            Get.offAll(const UserLists(title: 'UsersList'));
+            Get.back(); // Close the dialog
+            // Get.offAll(const UserLists(title: 'UsersList'));
           },
         );
       } else if (response.statusCode != 200) {

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/user_controllers/getall_users_controller.dart';
+import 'package:room_booking_app/defined_pages/superadmin_pages/add_user_screen.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/update_user.dart';
 
 import 'package:room_booking_app/utils/widgets/users_list_card.dart';
@@ -60,6 +61,47 @@ class _UserListsState extends State<UserLists> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                const Spacer(),
+                Shimmer(
+                  duration: const Duration(seconds: 2),
+                  // This is NOT the default value. Default value: Duration(seconds: 0)
+                  interval: const Duration(milliseconds: 20),
+                  // This is the default value
+                  color: Colors.white,
+                  // This is the default value
+                  colorOpacity: 1,
+                  // This is the default value
+                  enabled: true,
+                  // This is the default value
+                  direction: const ShimmerDirection.fromLTRB(),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(AddUserScreen(title: 'Add User'));
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          color: Colors.white70,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Add Users',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

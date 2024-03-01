@@ -50,49 +50,49 @@ class ReservationScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Shimmer(
-                    duration: const Duration(seconds: 2),
-                    // This is NOT the default value. Default value: Duration(seconds: 0)
-                    interval: const Duration(milliseconds: 20),
-                    // This is the default value
-                    color: Colors.white,
-                    // This is the default value
-                    colorOpacity: 1,
-                    // This is the default value
-                    enabled: true,
-                    // This is the default value
-                    direction: const ShimmerDirection.fromLTRB(),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(Get.defaultDialog(
-                          backgroundColor: Color.fromARGB(255, 195, 215, 196),
-                          title: 'Reset Password !',
-                          content: DialogBox(),
-                        ));
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            color: Colors.white70,
-                            borderRadius: BorderRadius.circular(6)),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                'Reset Password',
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Shimmer(
+                  //   duration: const Duration(seconds: 2),
+                  //   // This is NOT the default value. Default value: Duration(seconds: 0)
+                  //   interval: const Duration(milliseconds: 20),
+                  //   // This is the default value
+                  //   color: Colors.white,
+                  //   // This is the default value
+                  //   colorOpacity: 1,
+                  //   // This is the default value
+                  //   enabled: true,
+                  //   // This is the default value
+                  //   direction: const ShimmerDirection.fromLTRB(),
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       Get.to(Get.defaultDialog(
+                  //         backgroundColor: Color.fromARGB(255, 195, 215, 196),
+                  //         title: 'Reset Password !',
+                  //         content: DialogBox(),
+                  //       ));
+                  //     },
+                  //     child: Container(
+                  //       height: 30,
+                  //       width: 100,
+                  //       decoration: BoxDecoration(
+                  //           border: Border.all(),
+                  //           color: Colors.white70,
+                  //           borderRadius: BorderRadius.circular(6)),
+                  //       child: const Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: Text(
+                  //               'Reset Password',
+                  //               style: TextStyle(
+                  //                   color: Colors.black, fontSize: 12),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -111,7 +111,7 @@ class ReservationScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
                 ),
-                hintText: "Search for PoTxnId",
+                hintText: "Search for Name",
                 prefixIcon: const Icon(Icons.search),
                 prefixIconColor: Colors.black,
               ),
@@ -163,6 +163,8 @@ class ReservationScreen extends StatelessWidget {
                 } else {
                   return Column(
                     children: [
+                      // const Text('click on card to view participants'),
+                      // SizedBox(height: 10),
                       Expanded(
                         child: ListView.builder(
                           itemCount: snapshot.data.length,
