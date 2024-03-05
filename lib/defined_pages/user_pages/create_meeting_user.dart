@@ -1,3 +1,6 @@
+import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/lib/constants.dart';
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
@@ -6,7 +9,6 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:room_booking_app/controllers/user_controllers/create_meeting_get_room_users_controller.dart';
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 class CreateMeetingsUser extends StatefulWidget {
   const CreateMeetingsUser({Key? key, required this.title}) : super(key: key);
@@ -17,6 +19,17 @@ class CreateMeetingsUser extends StatefulWidget {
 }
 
 class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
+  TextEditingController meetingTypec = TextEditingController();
+  TextEditingController selectedRoomc = TextEditingController();
+  TextEditingController floorc = TextEditingController();
+  TextEditingController seatingCapacityc = TextEditingController();
+  TextEditingController meetingRoomSpecificationsc = TextEditingController();
+  TextEditingController startTimec = TextEditingController();
+  TextEditingController endTimec = TextEditingController();
+  TextEditingController purposec = TextEditingController();
+  TextEditingController selectedParticipantsc = TextEditingController();
+  TextEditingController selectedRoomIdc = TextEditingController();
+
   String? _meetingType;
   String? _selectedRoom;
   late DateTime _date;
@@ -44,10 +57,56 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
   Future<void> fetchData() async {
     // Call multiple asynchronous methods using Future.wait
     await Future.wait([mc.getRooms(), mc.getUsers()]);
-
     // setState(() {
     participantsList = mc.userListObj;
     // });
+  }
+
+  Time _startTimee = Time(hour: 11, minute: 30);
+  Time _endTimee = Time(hour: 11, minute: 30);
+
+  dynamic startValidate;
+  dynamic endValidate;
+
+  bool iosStyle = true;
+
+  void startTime(Time newTime) {
+    setState(() {
+      _startTime = newTime;
+      mc.selectedStartTime.value = '${_startTime.hour}:${_startTime.minute}';
+      startValidate = newTime;
+    });
+  }
+
+  void endTime(Time newTime) {
+    setState(() {
+      _endTime = newTime;
+      mc.selectedEndTime.value = '${_endTime.hour}:${_endTime.minute}';
+      endValidate = newTime;
+    });
+  }
+
+  String? validateEndTime() {
+    final DateTime startDateTime = DateTime(
+      _date.year,
+      _date.month,
+      _date.day,
+      _startTime.hour,
+      _startTime.minute,
+    );
+
+    final DateTime endDateTime = DateTime(
+      _date.year,
+      _date.month,
+      _date.day,
+      _endTime.hour,
+      _endTime.minute,
+    );
+
+    if (endDateTime.isBefore(startDateTime)) {
+      return 'End time must be greater than start time';
+    }
+    // await mc.createMeetingUser();
   }
 
   @override
@@ -62,7 +121,7 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 213, 231, 214),
+      backgroundColor: const Color.fromARGB(255, 250, 253, 251),
       body: FutureBuilder(
           // future: mc.getRooms(), // Assuming getRooms returns a Future
           future: fetchData(),
@@ -110,40 +169,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               ),
                             ),
                             const Spacer(),
-                            Shimmer(
-                              duration: const Duration(seconds: 2),
-                              interval: const Duration(milliseconds: 20),
-                              color: Colors.white,
-                              colorOpacity: 1,
-                              enabled: true,
-                              direction: const ShimmerDirection.fromLTRB(),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  height: 30,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      color: Colors.white70,
-                                      borderRadius: BorderRadius.circular(6)),
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: Text(
-                                          'Create Meeting',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -157,6 +182,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                           children: [
                             DropdownButtonFormField<String>(
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Meeting Type',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -166,7 +193,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               onChanged: (value) {
                                 setState(() {
                                   _meetingType = value;
-                                  mc.meetingType.value = value.toString();
+                                  mc.selectedMeetingType.value =
+                                      value.toString();
                                 });
                               },
                               items: <String>[
@@ -188,6 +216,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             const SizedBox(height: 16),
                             DropdownButtonFormField<int>(
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Select Room',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -200,15 +230,12 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                   _selectedRoomId = mc.roomListObj.firstWhere(
                                     (element) => element.id == value,
                                   );
-
                                   _selectedRoom = _selectedRoomId
                                       ?.name; // Update _selectedRoom with the name
-
                                   setRoomDetails(_selectedRoom);
                                   // mc.selectedRoomId.value = _selectedRoomId;
-
                                   mc.selectedRoomId.value = _selectedRoomId?.id;
-                                  print(_selectedRoomId);
+                                  // print(_selectedRoomId);
                                 });
                                 // Fetch and set room details based on the selected room
                               },
@@ -231,6 +258,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             TextFormField(
                               readOnly: true,
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Floor',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -238,9 +267,9 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               ),
                               initialValue: _floor ?? 'floor',
                               onChanged: (value) {
-                                setState(() {
-                                  _floor = value;
-                                });
+                                // setState(() {
+                                _floor = value;
+                                // });
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -253,6 +282,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             TextFormField(
                               readOnly: true,
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Seating Capacity',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -261,9 +292,9 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               initialValue:
                                   _seatingCapacity ?? 'seating capacity',
                               onChanged: (value) {
-                                setState(() {
-                                  _seatingCapacity = value;
-                                });
+                                // setState(() {
+                                _seatingCapacity = value;
+                                // });
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -277,6 +308,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               readOnly: true,
                               maxLines: null,
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Meeting Room Specifications',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -285,9 +318,9 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                               initialValue: _meetingRoomSpecifications ??
                                   'room specifications',
                               onChanged: (value) {
-                                setState(() {
-                                  _meetingRoomSpecifications = value;
-                                });
+                                // setState(() {
+                                _meetingRoomSpecifications = value;
+                                // });
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -306,7 +339,17 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                     children: [
                                       const Text('Start Time'),
                                       TextFormField(
+                                        validator: (value) {
+                                          if (value == null ||
+                                              mc.selectedStartTime.value ==
+                                                  '') {
+                                            return 'Please select start time';
+                                          }
+                                        },
                                         decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 2, horizontal: 8),
                                           // labelText: 'Select Time',
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -314,17 +357,28 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                           ),
                                           suffixIcon: IconButton(
                                             onPressed: () async {
-                                              TimeOfDay? result =
-                                                  await showTimePicker(
-                                                context: context,
-                                                initialTime: _startTime,
+                                              Navigator.of(context).push(
+                                                showPicker(
+                                                  is24HrFormat: true,
+                                                  // showSecondSelector: true,
+                                                  context: context,
+                                                  value: _startTimee,
+                                                  onChange: startTime,
+                                                  minuteInterval:
+                                                      TimePickerInterval.FIVE,
+                                                  // Optional onChange to receive value as DateTime
+                                                ),
                                               );
-                                              if (result != null) {
-                                                setState(() {
-                                                  _startTime = result;
-                                                  mc.selectedStartTime = result;
-                                                });
-                                              }
+                                              // if (_startTimee == null) {
+                                              //   Get.snackbar(
+                                              //     "GeeksforGeeks",
+                                              //     "Hello everyone",
+                                              //     icon: Icon(Icons.person,
+                                              //         color: Colors.white),
+                                              //     snackPosition:
+                                              //         SnackPosition.BOTTOM,
+                                              //   );
+                                              // }
                                             },
                                             icon: const Icon(Icons.access_time),
                                           ),
@@ -346,7 +400,17 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                     children: [
                                       const Text('End Time'),
                                       TextFormField(
+                                        validator: (value) {
+                                          if (value == null ||
+                                              mc.selectedEndTime.value == '') {
+                                            return 'Please select end time';
+                                          }
+                                          return validateEndTime();
+                                        },
                                         decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 2, horizontal: 8),
                                           // labelText: 'Select Time',
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -354,17 +418,23 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                           ),
                                           suffixIcon: IconButton(
                                             onPressed: () async {
-                                              TimeOfDay? result =
-                                                  await showTimePicker(
-                                                context: context,
-                                                initialTime: _endTime,
+                                              Navigator.of(context).push(
+                                                showPicker(
+                                                  is24HrFormat: true,
+                                                  context: context,
+                                                  value: _endTimee,
+                                                  onChange: endTime,
+                                                  minuteInterval:
+                                                      TimePickerInterval.FIVE,
+                                                ),
                                               );
-                                              if (result != null) {
-                                                setState(() {
-                                                  _endTime = result;
-                                                  mc.selectedEndTime = result;
-                                                });
-                                              }
+                                              // if (_endTime != null) {
+                                              //   setState(() {
+                                              //     // _endTime = _endTimee;
+                                              //     mc.selectedEndTime.value =
+                                              //         '${_endTime.hour}:${_endTime.minute}';
+                                              //   });
+                                              // }
                                             },
                                             icon: const Icon(Icons.access_time),
                                           ),
@@ -408,7 +478,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                 }
                               },
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
+                                if (value == null ||
+                                    mc.selectedDate.value == '') {
                                   return 'Please select date';
                                 }
                                 return null;
@@ -417,6 +488,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             const SizedBox(height: 16),
                             DropdownButtonFormField<String>(
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Please Select Purpose',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -459,6 +532,13 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: MultiSelectDialogField<String>(
+                                  validator: (value) {
+                                    if (_purpose == 'Meeting' &&
+                                        _selectedParticipants == null) {
+                                      return 'Please select participants';
+                                    }
+                                    return null;
+                                  },
                                   searchable: true,
                                   items: participantsList
                                       .map(
@@ -535,6 +615,25 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  // if (startValidate == null) {
+                                  //   Get.snackbar(
+                                  //     "Time Error",
+                                  //     "Please select start Time",
+                                  //     icon: const Icon(
+                                  //         Icons.warning_amber_rounded,
+                                  //         color: Colors.white),
+                                  //     snackPosition: SnackPosition.BOTTOM,
+                                  //   );
+                                  // } else if (endValidate == null) {
+                                  //   Get.snackbar(
+                                  //     "Time Error",
+                                  //     "Please select end Time",
+                                  //     icon: const Icon(
+                                  //         Icons.warning_amber_rounded,
+                                  //         color: Colors.white),
+                                  //     snackPosition: SnackPosition.BOTTOM,
+                                  //   );
+                                  // }
                                   await mc.createMeetingUser();
                                 }
                               },

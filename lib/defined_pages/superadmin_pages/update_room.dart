@@ -349,9 +349,6 @@ class _UpdateRoomsScreenState extends State<UpdateRoomsScreen> {
                             int.parse(seatingCapacityController.text),
                             widget.id,
                             1);
-                        Get.offAll(BottomNaviagtionBarScreen(
-                          initialIndex: 2,
-                        ));
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,

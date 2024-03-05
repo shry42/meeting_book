@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smenus/dropdown.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
@@ -15,7 +14,6 @@ class MyMeetingsScreen extends StatelessWidget {
   MyMeetingsScreen({super.key, required this.title});
 
   final String title;
-
   final MyMeetingsGetController meetCont = MyMeetingsGetController();
 
   @override

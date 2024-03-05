@@ -155,6 +155,7 @@ class _UserListsState extends State<UserLists> {
                     Expanded(
                       child: ListView.builder(
                         itemCount: snapshot.data.length,
+                        // reverse: true,
                         itemBuilder: (ctx, index) => GestureDetector(
                           onTap: () async {
                             String firstName = snapshot.data[index].firstName;

@@ -20,12 +20,12 @@ class CreateMeetingUserController extends GetxController {
   RxList participants = <int>[].obs;
 
   //
-  RxString selectedMeetingType = 'External'.obs;
+  RxString selectedMeetingType = ''.obs;
   var selectedRoomId = 0.obs;
   RxString selectedRoom = ''.obs;
   RxString selectedFloor = ''.obs;
-  late TimeOfDay selectedStartTime;
-  late TimeOfDay selectedEndTime;
+  RxString selectedStartTime = ''.obs;
+  RxString selectedEndTime = ''.obs;
   RxString selectedDate = ''.obs;
   RxString selectedPurpose = ''.obs;
   RxList selectedParticipantsId = [].obs;
@@ -120,8 +120,8 @@ class CreateMeetingUserController extends GetxController {
       body: json.encode({
         "roomId": selectedRoomId.value,
         "date": selectedDate.value.split(' ')[0],
-        "startTime": '${selectedStartTime.hour}:${selectedStartTime.minute}',
-        "endTime": '${selectedEndTime.hour}:${selectedEndTime.minute}',
+        "startTime": selectedStartTime.value,
+        "endTime": selectedEndTime.value,
         "meetingType": selectedMeetingType.value,
 
         "purpose": selectedPurpose.value,
