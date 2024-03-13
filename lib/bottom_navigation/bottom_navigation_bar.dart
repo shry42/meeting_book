@@ -5,7 +5,7 @@ import 'package:room_booking_app/controllers/bottom_nav_controller.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/reservations_details_screen.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/rooms_list.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/users_list.dart';
-import 'package:room_booking_app/defined_pages/superadmin_pages/users_settings.dart';
+import 'package:room_booking_app/defined_pages/superadmin_pages/admin_settings.dart';
 
 class BottomNaviagtionBarScreen extends StatefulWidget {
   final int initialIndex;
@@ -22,14 +22,14 @@ class _BottomNaviagtionBarScreenState extends State<BottomNaviagtionBarScreen> {
   BottomNavigationController bnc = BottomNavigationController();
 
   int _page = 0;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   List pages = [
     ReservationScreen(title: 'Reservations'),
     const UserLists(title: 'Users list'),
     // AddUserScreen(title: 'Add User'),
     const RoomsListScreen(title: 'Rooms list'),
-    const UserSettingsScreen(
+    const AdminSettingsScreen(
       title: 'Profile settings',
     ),
   ];
@@ -49,7 +49,7 @@ class _BottomNaviagtionBarScreenState extends State<BottomNaviagtionBarScreen> {
           key: _bottomNavigationKey,
           index: bnc
               .selectedIndex.value, // Set the initial index to 1 (2nd position)
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color.fromARGB(0, 246, 245, 245),
           height: 60,
           buttonBackgroundColor: const Color.fromARGB(255, 101, 194, 104),
           color: const Color.fromARGB(255, 100, 219, 104),

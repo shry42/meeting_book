@@ -5,6 +5,43 @@ class AppController {
   static int? _participantId;
   static int? _mainUid;
   static String? _role;
+  static String? _userName;
+  static String? _email;
+  static String? _mobile;
+
+  static get mobile => _mobile;
+  static setMobile(value) {
+    _mobile = value;
+  }
+
+  static get userName => _userName;
+  static setUserName(value) {
+    _userName = value;
+  }
+
+  static get email => _email;
+  static setEmail(value) {
+    _email = value;
+  }
+
+  // static String? _noOfUsers;
+  // static String? _noOfRooms;
+  // static int? _noOfMeetings;
+
+  // static get noOfUsers => _noOfUsers;
+  // static setNoOfUsers(value) {
+  //   _noOfUsers = value;
+  // }
+
+  // static get noOfRooms => _noOfRooms;
+  // static setNoOfRooms(value) {
+  //   _noOfRooms = value;
+  // }
+
+  // static get noOfMeetings => _noOfMeetings;
+  // static setNoOfMeetings(value) {
+  //   _noOfMeetings = value;
+  // }
 
   static get role => _role;
   static setRole(value) {

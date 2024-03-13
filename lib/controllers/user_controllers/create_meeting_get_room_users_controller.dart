@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:room_booking_app/api_services/api_service.dart';
+import 'package:room_booking_app/bottom_navigation/bottom_navigation_bar.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
 import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
 import 'package:room_booking_app/models/user_model/get_all_rooms_model.dart';
@@ -172,7 +173,8 @@ class CreateMeetingUserController extends GetxController {
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () {
-            Get.back(); // Close the dialog
+            Get.offAll(const BottomNaviagtionBarScreen());
+            // Get.back(); // Close the dialog
           },
         );
       }

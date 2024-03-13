@@ -1,27 +1,25 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:room_booking_app/api_services/api_service.dart';
-import 'package:room_booking_app/bottom_navigation/bottom_navigation_bar.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
-import 'package:room_booking_app/defined_pages/superadmin_pages/users_list.dart';
+import 'package:room_booking_app/defined_pages/login_page.dart';
+import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
 
-class UpdateUserController extends GetxController {
-  Future updateUserDetails(
-      String firstName, lastName, email, mobileNo, int id) async {
+class AddSuggestionController extends GetxController {
+  Future addSuggestion(String suggestion, String additionalComments) async {
     http.Response response = await http.post(
-      Uri.parse('${ApiService.baseUrl}/api/users/updateUserDetails'),
+      Uri.parse('${ApiService.baseUrl}/api/rooms/updateUserBooking'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${AppController.accessToken}',
       },
       body: json.encode({
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "mobileNo": mobileNo,
-        "id": id
+        "bookingId": AppController.meetingId,
+        "suggestion": suggestion,
+        "additionalComments": additionalComments
       }),
     );
     if (response.statusCode == 200) {
@@ -32,16 +30,12 @@ class UpdateUserController extends GetxController {
       if (status == true) {
         Get.defaultDialog(
           title: "Success",
-          middleText: message,
+          middleText: "$message",
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () {
-            Get.offAll(const BottomNaviagtionBarScreen(
-              initialIndex: 1,
-            ));
             // Get.back(); // Close the dialog
-
-            // Get.offAll(const UserLists(title: 'UsersList'));
+            Get.offAll(MyMeetingsScreen(title: 'My Meetings'));
           },
         );
       } else if (response.statusCode != 200) {
@@ -67,7 +61,7 @@ class UpdateUserController extends GetxController {
             textConfirm: "OK",
             confirmTextColor: Colors.white,
             onConfirm: () {
-              Get.offAll(const BottomNaviagtionBarScreen());
+              Get.offAll(LoginPage());
               // Get.back(); // Close the dialog
             },
           );

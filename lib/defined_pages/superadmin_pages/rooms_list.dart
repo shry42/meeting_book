@@ -25,6 +25,7 @@ class _RoomsListScreenState extends State<RoomsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 213, 231, 214),
       // automaticallyImplyLeading: false,
       // shadowColor: Colors.black87,
       // elevation: 1,

@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:http/http.dart' as http;
@@ -9,10 +7,12 @@ import 'package:room_booking_app/controllers/app_controllers/app_main_controller
 import 'package:room_booking_app/controllers/user_controllers/delete_meeting_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/delete_participant_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/get_meeting_participants_controller.dart';
+import 'package:room_booking_app/defined_pages/user_pages/add_suggestion.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class ParticipantsMeetListScreen extends StatefulWidget {
-  ParticipantsMeetListScreen({Key? key, required this.title}) : super(key: key);
+  const ParticipantsMeetListScreen({Key? key, required this.title})
+      : super(key: key);
 
   final String title;
 
@@ -69,6 +69,53 @@ class _ParticipantsMeetListScreenState
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  const SizedBox(width: 25),
+                  if (AppController.role == 'user')
+                    Shimmer(
+                      duration: const Duration(seconds: 2),
+                      // This is NOT the default value. Default value: Duration(seconds: 0)
+                      interval: const Duration(milliseconds: 20),
+                      // This is the default value
+                      color: Colors.white,
+                      // This is the default value
+                      colorOpacity: 1,
+                      // This is the default value
+                      enabled: true,
+                      // This is the default value
+                      direction: const ShimmerDirection.fromLTRB(),
+                      child: GestureDetector(
+                        onTap: () async {
+                          Get.to(
+                            const AddSuggestionScreen(
+                              title: 'Add Suggestions',
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              border: Border.all(),
+                              color: Colors.white70,
+                              borderRadius: BorderRadius.circular(6)),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  'Add suggestion',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   const Spacer(),
                   if (AppController.role == 'user')
                     Shimmer(
@@ -100,7 +147,7 @@ class _ParticipantsMeetListScreenState
                             children: [
                               Center(
                                 child: Text(
-                                  'Delete meeting',
+                                  'Cancel meeting',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,

@@ -38,6 +38,9 @@ class loginController extends GetxController {
       token = result['token'];
       int mainUid = user!.id;
       role = user!.role;
+      AppController.setUserName('${user!.firstName} ${user!.lastName}');
+      AppController.setEmail(user!.email);
+      AppController.setMobile(user!.mobileNo);
       String roles = user!.role;
       AppController.setMainUid(mainUid);
       AppController.setRole(roles);

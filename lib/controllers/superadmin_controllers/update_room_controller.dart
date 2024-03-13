@@ -67,7 +67,7 @@ class UpdateRoomController extends GetxController {
             textConfirm: "OK",
             confirmTextColor: Colors.white,
             onConfirm: () {
-              Get.back(); // Close the dialog
+              Get.offAll(const BottomNaviagtionBarScreen());
             },
           );
         }

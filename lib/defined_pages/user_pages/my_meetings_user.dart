@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
+import 'package:room_booking_app/controllers/login_controller.dart';
 import 'package:room_booking_app/controllers/user_controllers/my_meetings_get_controller.dart';
 import 'package:room_booking_app/defined_pages/login_page.dart';
 import 'package:room_booking_app/defined_pages/superadmin_pages/reset_password_dialog.dart';
@@ -9,12 +10,90 @@ import 'package:room_booking_app/defined_pages/user_pages/create_meeting_user.da
 import 'package:room_booking_app/defined_pages/user_pages/participants_meet_list.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-class MyMeetingsScreen extends StatelessWidget {
-  MyMeetingsScreen({super.key, required this.title});
+class MyMeetingsScreen extends StatefulWidget {
+  const MyMeetingsScreen({super.key, required this.title});
 
   final String title;
+
+  @override
+  State<MyMeetingsScreen> createState() => _MyMeetingsScreenState();
+}
+
+class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
+  // TutorialCoachMark? tutorialCoachMark;
+  // List<TargetFocus> targets = [];
+  // GlobalKey profileKey = GlobalKey();
+  // GlobalKey cardKey = GlobalKey();
   final MyMeetingsGetController meetCont = MyMeetingsGetController();
+
+  // @override
+  // void initState() {
+  //   Future.delayed(const Duration(seconds: 1), () {
+  //     _showTutorialCoachMark();
+  //   });
+  //   super.initState();
+  // }
+
+  // void _showTutorialCoachMark() {
+  //   _initTarget();
+  //   tutorialCoachMark = TutorialCoachMark(
+  //     targets: targets,
+  //   )..show(context: context);
+  // }
+
+//   void _initTarget() {
+//     targets = [
+// //profile
+//       TargetFocus(
+//           identify: "card-key",
+//           // shape: ShapeLightFocus.RRect,
+//           keyTarget: cardKey,
+//           contents: [
+//             TargetContent(
+//                 align: ContentAlign.bottom,
+//                 builder: (context, controller) {
+//                   // return Container();
+//                   return Center(
+//                     child: CoachmarkDesc(
+//                       text: '                          Tap to view details',
+//                       onNext: () {
+//                         controller.next();
+//                       },
+//                       onSkip: () {
+//                         controller.skip();
+//                       },
+//                     ),
+//                   );
+//                 }),
+//           ]),
+
+// //profiile
+//       TargetFocus(
+//           identify: "profile-key",
+//           // shape: ShapeLightFocus.RRect,
+//           keyTarget: profileKey,
+//           contents: [
+//             TargetContent(
+//                 align: ContentAlign.bottom,
+//                 builder: (context, controller) {
+//                   // return Container();
+//                   return Center(
+//                     child: CoachmarkDesc(
+//                       text: 'click to choose profile action',
+//                       onNext: () {
+//                         controller.next();
+//                       },
+//                       onSkip: () {
+//                         controller.skip();
+//                       },
+//                     ),
+//                   );
+//                 }),
+//           ]),
+//     ];
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +127,7 @@ class MyMeetingsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -140,11 +219,13 @@ class MyMeetingsScreen extends StatelessWidget {
                   //   ),
                   // ),
                   PopupMenuButton<String>(
+                    // key: profileKey,
                     onSelected: (value) {
                       // Handle menu item selection
                       if (value == 'changePassword') {
                         Get.to(Get.defaultDialog(
-                          backgroundColor: Color.fromARGB(255, 195, 215, 196),
+                          backgroundColor:
+                              const Color.fromARGB(255, 195, 215, 196),
                           title: 'Reset Password !',
                           content: DialogBox(),
                         ));
@@ -171,44 +252,44 @@ class MyMeetingsScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    color: Color.fromARGB(255, 233, 239, 227),
+                    color: const Color.fromARGB(255, 233, 239, 227),
                   ),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 45,
-            width: 360,
-            child: TextField(
-              // controller: searchController,
-              onChanged: (value) {
-                // setState(() {
-                //   if (value.isEmpty) {
-                //     dataList = mainDataList; // Reset to show all data
-                //   } else {
-                //     dataList = mainDataList
-                //         ?.where((element) => element.POTxnID.toString()
-                //             .contains(value.toString()))
-                //         .toList();
-                //   }
-                // });
-              },
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 233, 239, 226),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Search for meeting",
-                prefixIcon: const Icon(Icons.search),
-                prefixIconColor: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
+          // SizedBox(
+          //   height: 45,
+          //   width: 360,
+          //   child: TextField(
+          //     // controller: searchController,
+          //     onChanged: (value) {
+          //       // setState(() {
+          //       //   if (value.isEmpty) {
+          //       //     dataList = mainDataList; // Reset to show all data
+          //       //   } else {
+          //       //     dataList = mainDataList
+          //       //         ?.where((element) => element.POTxnID.toString()
+          //       //             .contains(value.toString()))
+          //       //         .toList();
+          //       //   }
+          //       // });
+          //     },
+          //     decoration: InputDecoration(
+          //       filled: true,
+          //       fillColor: const Color.fromARGB(255, 233, 239, 226),
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(8),
+          //         borderSide: BorderSide.none,
+          //       ),
+          //       hintText: "Search for meeting",
+          //       prefixIcon: const Icon(Icons.search),
+          //       prefixIconColor: Colors.black,
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(height: 12),
           Expanded(
             child: FutureBuilder(
               future: meetCont.getMeetDetails(),
@@ -261,10 +342,11 @@ class MyMeetingsScreen extends StatelessWidget {
                             onTap: () async {
                               int meetingId = snapshot.data[index].id;
                               AppController.setmeetingId(meetingId);
-                              Get.to(ParticipantsMeetListScreen(
-                                  title: 'Participants List'));
+                              Get.to(const ParticipantsMeetListScreen(
+                                  title: 'Participants'));
                             },
                             child: MyMeetingsUserCard(
+                              // key: cardKey,
                               ht: 250,
                               wd: 350,
                               duration: 1,
@@ -295,6 +377,63 @@ class MyMeetingsScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class CoachmarkDesc extends StatefulWidget {
+  const CoachmarkDesc({
+    super.key,
+    required this.text,
+    this.skip = "Skip",
+    this.next = "Next",
+    this.onSkip,
+    this.onNext,
+  });
+
+  final String text;
+  final String skip;
+  final String next;
+  final void Function()? onSkip;
+  final void Function()? onNext;
+
+  @override
+  State<CoachmarkDesc> createState() => _CoachmarkDescState();
+}
+
+class _CoachmarkDescState extends State<CoachmarkDesc> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        // color: const Color.fromARGB(255, 67, 65, 65),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.text,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              TextButton(
+                onPressed: widget.onSkip,
+                child: Text(widget.skip),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(66, 118, 116, 116)),
+                onPressed: widget.onNext,
+                child: const Text('next'),
+              ),
+            ]),
+          ]),
     );
   }
 }

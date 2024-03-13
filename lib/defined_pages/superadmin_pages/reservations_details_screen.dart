@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:room_booking_app/controllers/app_controllers/app_main_controller.dart';
 import 'package:room_booking_app/controllers/superadmin_controllers/all_meet_list.dart';
-import 'package:room_booking_app/defined_pages/superadmin_pages/reset_password_dialog.dart';
 import 'package:room_booking_app/defined_pages/user_pages/participants_meet_list.dart';
 import 'package:room_booking_app/utils/widgets/my_meetings_user_card.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 class ReservationScreen extends StatelessWidget {
   ReservationScreen({super.key, required this.title});
@@ -33,7 +31,7 @@ class ReservationScreen extends StatelessWidget {
               ],
             ),
             //--code to remove border
-            border: Border.fromBorderSide(BorderSide.none),
+            border: const Border.fromBorderSide(BorderSide.none),
             shadowStrength: 10,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(16),
@@ -50,78 +48,37 @@ class ReservationScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  // Shimmer(
-                  //   duration: const Duration(seconds: 2),
-                  //   // This is NOT the default value. Default value: Duration(seconds: 0)
-                  //   interval: const Duration(milliseconds: 20),
-                  //   // This is the default value
-                  //   color: Colors.white,
-                  //   // This is the default value
-                  //   colorOpacity: 1,
-                  //   // This is the default value
-                  //   enabled: true,
-                  //   // This is the default value
-                  //   direction: const ShimmerDirection.fromLTRB(),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       Get.to(Get.defaultDialog(
-                  //         backgroundColor: Color.fromARGB(255, 195, 215, 196),
-                  //         title: 'Reset Password !',
-                  //         content: DialogBox(),
-                  //       ));
-                  //     },
-                  //     child: Container(
-                  //       height: 30,
-                  //       width: 100,
-                  //       decoration: BoxDecoration(
-                  //           border: Border.all(),
-                  //           color: Colors.white70,
-                  //           borderRadius: BorderRadius.circular(6)),
-                  //       child: const Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         crossAxisAlignment: CrossAxisAlignment.center,
-                  //         children: [
-                  //           Center(
-                  //             child: Text(
-                  //               'Reset Password',
-                  //               style: TextStyle(
-                  //                   color: Colors.black, fontSize: 12),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
           ),
           const SizedBox(width: 10),
-          SizedBox(
-            height: 45,
-            width: 360,
-            child: TextField(
-              // controller: searchController,
-              onChanged: (value) {},
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(255, 233, 239, 226),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Search for Name",
-                prefixIcon: const Icon(Icons.search),
-                prefixIconColor: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
+          // SizedBox(
+          //   height: 45,
+          //   width: 360,
+          //   child: TextField(
+          //     // controller: searchController,
+          //     onChanged: (value) {},
+          //     decoration: InputDecoration(
+          //       filled: true,
+          //       fillColor: const Color.fromARGB(255, 233, 239, 226),
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(8),
+          //         borderSide: BorderSide.none,
+          //       ),
+          //       hintText: "Search for Name",
+          //       prefixIcon: const Icon(Icons.search),
+          //       prefixIconColor: Colors.black,
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 8),
           Expanded(
             child: FutureBuilder(
+              initialData: [],
               future: amc.getAllMeetDetails(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                // AppController.setNoOfMeetings(snapshot.data.length);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: Column(
@@ -165,6 +122,7 @@ class ReservationScreen extends StatelessWidget {
                     children: [
                       // const Text('click on card to view participants'),
                       // SizedBox(height: 10),
+                      // AppController.setNoOfMeetings(snapshot.data.length),
                       Expanded(
                         child: ListView.builder(
                           itemCount: snapshot.data.length,
@@ -172,28 +130,38 @@ class ReservationScreen extends StatelessWidget {
                             onTap: () async {
                               int meetingId = snapshot.data[index].id;
                               AppController.setmeetingId(meetingId);
-                              Get.to(ParticipantsMeetListScreen(
-                                  title: 'Participants List'));
+                              Get.to(const ParticipantsMeetListScreen(
+                                  title: 'Participants'));
                             },
-                            child: MyMeetingsUserCard(
-                              ht: 250,
-                              wd: 350,
-                              duration: 1,
-                              userName:
-                                  '${snapshot.data[index].firstName} ${snapshot.data[index].lastName}',
-                              roomName: snapshot.data[index].name.toString(),
-                              date: snapshot.data[index].date.toString(),
-                              startTime:
-                                  snapshot.data[index].startTime.toString(),
-                              endTime: snapshot.data[index].endTime.toString(),
-                              purpose: snapshot.data[index].purpose.toString(),
-                              meetingType:
-                                  snapshot.data[index].meetingType.toString(),
-                              suggestion:
-                                  snapshot.data[index].suggestion.toString(),
-                              additionalComments: snapshot
-                                  .data[index].additionalComments
-                                  .toString(),
+                            child: Column(
+                              children: [
+                                //  noOfMeetings = snapshot.data.length,
+                                // AppController.setNoOfMeetings(
+                                //     snapshot.data.length),
+                                MyMeetingsUserCard(
+                                  ht: 250,
+                                  wd: 350,
+                                  duration: 1,
+                                  userName:
+                                      '${snapshot.data[index].firstName} ${snapshot.data[index].lastName}',
+                                  roomName:
+                                      snapshot.data[index].name.toString(),
+                                  date: snapshot.data[index].date.toString(),
+                                  startTime:
+                                      snapshot.data[index].startTime.toString(),
+                                  endTime:
+                                      snapshot.data[index].endTime.toString(),
+                                  purpose:
+                                      snapshot.data[index].purpose.toString(),
+                                  meetingType: snapshot.data[index].meetingType
+                                      .toString(),
+                                  suggestion: snapshot.data[index].suggestion
+                                      .toString(),
+                                  additionalComments: snapshot
+                                      .data[index].additionalComments
+                                      .toString(),
+                                ),
+                              ],
                             ),
                           ),
                         ),

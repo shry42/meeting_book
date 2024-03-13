@@ -106,6 +106,14 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
     if (endDateTime.isBefore(startDateTime)) {
       return 'End time must be greater than start time';
     }
+
+    final Duration duration = endDateTime.difference(startDateTime);
+    if (duration.inHours > 2) {
+      return 'Meeting duration cannot exceed 2 hours';
+    } else if (duration.inMinutes < 5) {
+      return 'meeting duration cannot be less than 5 minutes';
+    }
+
     // await mc.createMeetingUser();
   }
 
@@ -565,7 +573,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                                       )
                                                       .id)
                                               .toList();
-
                                       // Now, selectedIds contains the ids of the selected participants
                                       // print(selectedIds);
                                     });
