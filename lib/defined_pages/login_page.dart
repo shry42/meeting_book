@@ -6,7 +6,6 @@ import 'package:room_booking_app/controllers/app_controllers/app_main_controller
 import 'package:room_booking_app/controllers/login_controller.dart';
 import 'package:room_booking_app/custom_painter/login_page_shape.dart';
 import 'package:room_booking_app/defined_pages/user_pages/my_meetings_user.dart';
-import 'package:room_booking_app/defined_pages/user_pages/user_settings.dart';
 import 'package:room_booking_app/utils/toast_service.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 

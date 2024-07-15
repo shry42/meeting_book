@@ -232,7 +232,7 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                 ),
                               ),
                               value: _selectedRoomId
-                                  ?.id, // Use the id as the value
+                                  ?.id, // Use  the id as the value
                               onChanged: (value) {
                                 setState(() {
                                   _selectedRoomId = mc.roomListObj.firstWhere(
@@ -347,6 +347,20 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                     children: [
                                       const Text('Start Time'),
                                       TextFormField(
+                                        onTap: () async {
+                                          Navigator.of(context).push(
+                                            showPicker(
+                                              is24HrFormat: true,
+                                              // showSecondSelector: true,
+                                              context: context,
+                                              value: _startTimee,
+                                              onChange: startTime,
+                                              minuteInterval:
+                                                  TimePickerInterval.FIVE,
+                                              // Optional onChange to receive value as DateTime
+                                            ),
+                                          );
+                                        },
                                         validator: (value) {
                                           if (value == null ||
                                               mc.selectedStartTime.value ==
@@ -377,16 +391,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                                   // Optional onChange to receive value as DateTime
                                                 ),
                                               );
-                                              // if (_startTimee == null) {
-                                              //   Get.snackbar(
-                                              //     "GeeksforGeeks",
-                                              //     "Hello everyone",
-                                              //     icon: Icon(Icons.person,
-                                              //         color: Colors.white),
-                                              //     snackPosition:
-                                              //         SnackPosition.BOTTOM,
-                                              //   );
-                                              // }
                                             },
                                             icon: const Icon(Icons.access_time),
                                           ),
@@ -394,7 +398,10 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                         readOnly: true,
                                         controller: TextEditingController(
                                           text:
-                                              '${_startTime.hour}:${_startTime.minute}',
+                                              // '${_startTime.hour}:${_startTime.minute}',
+                                              mc.selectedStartTime.value == ''
+                                                  ? 'select'
+                                                  : mc.selectedStartTime.value,
                                         ),
                                       ),
                                     ],
@@ -408,6 +415,18 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                     children: [
                                       const Text('End Time'),
                                       TextFormField(
+                                        onTap: () async {
+                                          Navigator.of(context).push(
+                                            showPicker(
+                                              is24HrFormat: true,
+                                              context: context,
+                                              value: _endTimee,
+                                              onChange: endTime,
+                                              minuteInterval:
+                                                  TimePickerInterval.FIVE,
+                                            ),
+                                          );
+                                        },
                                         validator: (value) {
                                           if (value == null ||
                                               mc.selectedEndTime.value == '') {
@@ -436,13 +455,6 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                                       TimePickerInterval.FIVE,
                                                 ),
                                               );
-                                              // if (_endTime != null) {
-                                              //   setState(() {
-                                              //     // _endTime = _endTimee;
-                                              //     mc.selectedEndTime.value =
-                                              //         '${_endTime.hour}:${_endTime.minute}';
-                                              //   });
-                                              // }
                                             },
                                             icon: const Icon(Icons.access_time),
                                           ),
@@ -450,7 +462,10 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                         readOnly: true,
                                         controller: TextEditingController(
                                           text:
-                                              '${_endTime.hour}:${_endTime.minute}',
+                                              // '${_endTime.hour}:${_endTime.minute}',
+                                              mc.selectedEndTime.value == ''
+                                                  ? 'select'
+                                                  : mc.selectedEndTime.value,
                                         ),
                                       ),
                                     ],
@@ -461,13 +476,18 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                             const SizedBox(height: 16),
                             TextFormField(
                               decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 8),
                                 labelText: 'Date',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
+                              // initialValue: "select date",
+                              // // _date.toLocal().toString().split(' ')[0],
                               initialValue:
-                                  _date.toLocal().toString().split(' ')[0],
+                                  mc.selectedDate.value.split(' ')[0] ??
+                                      'select date',
                               readOnly: true,
                               onTap: () async {
                                 DateTime? pickedDate = await showDatePicker(
@@ -541,7 +561,8 @@ class _CreateMeetingsUserState extends State<CreateMeetingsUser> {
                                 ),
                                 child: MultiSelectDialogField<String>(
                                   validator: (value) {
-                                    if (_purpose == 'Meeting' &&
+                                    if (mc.selectedMeetingType.value ==
+                                            'Internal' &&
                                         _selectedParticipants == null) {
                                       return 'Please select participants';
                                     }

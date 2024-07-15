@@ -91,7 +91,6 @@ class CreateMeetingUserController extends GetxController {
               participant.id != AppController.mainUid &&
               !(participant.role == 'superAdmin'))
           .toList();
-
       return userListObj;
     }
   }
@@ -144,7 +143,7 @@ class CreateMeetingUserController extends GetxController {
           textConfirm: "OK",
           confirmTextColor: Colors.white,
           onConfirm: () async {
-            Get.offAll(MyMeetingsScreen(
+            Get.offAll(const MyMeetingsScreen(
               title: 'My Meetings',
             ));
           },
